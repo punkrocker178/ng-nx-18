@@ -1,5 +1,21 @@
-<app-navbar></app-navbar>
-<main>
-  <router-outlet></router-outlet>
+<main class="container">
+  <mat-sidenav-container class="example-container">
+    <mat-sidenav #sidenav mode="over">
+      <mat-list>
+        <a mat-list-item routerLink="/home">Home</a>
+        <a mat-list-item routerLink="/pets">Pets</a>
+      </mat-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <app-navbar></app-navbar>
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+
   <app-footer></app-footer>
 </main>

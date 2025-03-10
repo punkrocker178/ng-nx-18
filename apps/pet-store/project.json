@@ -24,6 +24,10 @@
           {
             "glob": "**/*",
             "input": "apps/pet-store/public"
+          },
+          {
+            "glob": "**/*",
+            "input": "apps/pet-store/assets"
           }
         ],
         "styles": [
