@@ -1,8 +1,9 @@
-import { Component, effect, input  } from '@angular/core';
+import { Component, effect, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Product } from '../models/product.model';
+import { Product } from '../models/api/product.model';
 import { ProductService } from '../services/product.service';
 import { MatButtonModule } from '@angular/material/button';
+import { QueryRequest } from '../models/api/query-request.model';
 
 @Component({
   selector: 'lib-product',
@@ -23,9 +24,17 @@ export class ProductComponent {
     private _productService: ProductService
   ) {
     effect(() => {
-      this._productService.getDetails(this.productId()).subscribe((product: Product) => {
-        this.product = product;
-      });
+      this._getProductDetails();
+    });
+  }
+
+  private _getProductDetails(): void {
+    const queryRequest = {
+      populate: 'category',
+    } as QueryRequest;
+
+    this._productService.getDetails(this.productId(), queryRequest).subscribe((product: Product) => {
+      this.product = product;
     });
   }
 

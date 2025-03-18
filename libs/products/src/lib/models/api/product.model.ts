@@ -1,4 +1,5 @@
-import { BaseEntity } from "./base-entity.model";
+import { BaseEntity } from "../core/base-entity.model";
+import { Category } from "./category.model";
 
 export class Product extends BaseEntity {
     public name!: string;
@@ -7,7 +8,7 @@ export class Product extends BaseEntity {
     public price?: number;
     public priceDiscounted?: number;
     public isActive!: boolean;
-    public categoryId?: number;
+    public category?: Category;
     public stock!: number;
     public additionalInfo!: string;
 }
