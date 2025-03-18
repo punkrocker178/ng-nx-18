@@ -13,6 +13,5 @@ export class AppComponent implements OnInit {
   title = 'pet-store';
 
   ngOnInit(): void {
-    console.log('a');
   }
 }
