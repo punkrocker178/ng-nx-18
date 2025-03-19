@@ -1,33 +1,44 @@
 @if (product) {
 <div class="product-details">
-  <h1>{{ product.name }}</h1>
+  <h1 class="p-4">{{ product.name }}</h1>
 
   <div class="d-flex flex-row">
     <div class="d-flex flex-basis-50">
-      <div class="product-image-main p-4">
-        <img [src]="product.images?.[0]?.url" alt="{{ product.name }}" class="image" />
+      <div class="d-flex flex-col w-100">
+        <div class="product-image-main p-4">
+          <img [src]="selectedImage()?.url ||product.images?.[0]?.url" alt="{{ product.name }}" class="image" />
+        </div>
+        <div class="product-image-list p-4 flex-row d-flex">
+          @for (item of productImageList; track $index) {
+          <div class="image-list-item mr-1" tabindex="0" (click)="selectImage($index)" (keydown)="onKeydown($event)">
+            <img [src]="item.url" alt="{{ product.name }}" class="image" />
+          </div>
+          }
+        </div>
       </div>
     </div>
     <div class="d-flex flex-col flex-grow p-4">
-      <div class="product-info">
-        <div>Category: {{product.category?.name}}</div>
-        <div>Price:{{ product.price | currency }}</div>
+      <div class="product-info mb-4">
+        <div class="mb-1"><span class="text-bold">Category: </span>{{product.category?.name}}</div>
+        <div class="mb-1"><span class="text-bold">Price: </span>{{ product.price | currency }}</div>
         @if (product.priceDiscounted) {
-        <div>
-          Discounted Price: {{ product.priceDiscounted | currency }}
+        <div class="mb-1">
+          <span class="text-bold">Price:</span> {{ product.priceDiscounted | currency }}
         </div>
         }
-        <div>Description: {{ product.description }}</div>
-        <div>Stock: {{ product.stock > 0 ? product.stock : 'Out of Stock' }}</div>
+        <div class="mb-1"><span class="text-bold">Description: </span>{{ product.description }}</div>
+        <div class="mb-1"><span class="text-bold">Stock: </span>
+          {{ product.stock > 0 ? product.stock : 'Out of Stock' }}</div>
       </div>
 
       <div class="product-actions">
         <button mat-flat-button [disabled]="product.stock <= 0" (click)="addToCart()">Add to Cart</button>
       </div>
     </div>
-  </div>
 
+  </div>
 </div>
-} @else {
+}
+@else {
 <p>Loading product details...</p>
 }
