@@ -1,9 +1,10 @@
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, input, isDevMode } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from '../models/api/product.model';
 import { ProductService } from '../services/product.service';
 import { MatButtonModule } from '@angular/material/button';
 import { QueryRequest } from '../models/api/query-request.model';
+import { delay } from 'rxjs';
 
 @Component({
   selector: 'lib-product',
@@ -26,15 +27,17 @@ export class ProductComponent {
     effect(() => {
       this._getProductDetails();
     });
+
   }
 
   private _getProductDetails(): void {
     const queryRequest = {
-      populate: 'category',
+      populate: ['category', 'images'],
     } as QueryRequest;
 
-    this._productService.getDetails(this.productId(), queryRequest).subscribe((product: Product) => {
+    this._productService.getDetails(this.productId(), queryRequest).pipe(delay(500)).subscribe((product: Product) => {
       this.product = product;
+
     });
   }
 

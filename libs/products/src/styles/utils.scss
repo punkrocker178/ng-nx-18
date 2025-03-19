@@ -1,0 +1,43 @@
+$spacing: (1: 0.25rem, 2: 0.5rem, 3: 0.75rem, 4: 1rem, 5: 1.25rem, 6: 1.5rem, 7:1.75rem, 8: 2rem, 9: 2.25rem, 10: 2.5rem);
+
+@each $level, $space in $spacing {
+  .m-#{$level} {
+    margin: $space;
+  }
+
+  .mt-#{$level} {
+    margin-top: $space;
+  }
+
+  .mr-#{$level} {
+    margin-right: $space;
+  }
+
+  .mb-#{$level} {
+    margin-bottom: $space;
+  }
+
+  .ml-#{$level} {
+    margin-left: $space;
+  }
+
+  .p-#{$level} {
+    padding: $space;
+  }
+
+  .pt-#{$level} {
+    padding-top: $space;
+  }
+
+  .pr-#{$level} {
+    padding-right: $space;
+  }
+
+  .pb-#{$level} {
+    padding-bottom: $space;
+  }
+
+  .pl-#{$level} {
+    padding-left: $space;
+  }
+}

@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, isDevMode } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { Product } from "../models/api/product.model";
 import { DataQeuryResponse as DataQueryResponse } from "../models/core/data-query-response.model";
@@ -20,7 +20,20 @@ export class ProductService {
 
   public getDetails(id: string, params?: QueryRequest): Observable<Product> {
     return this._httpClient.get(`${this.BASE_URL}/${id}`, { params: { ...params } }).pipe(
-      map((response: any) => response.data as Product)
+      map((response: any) => response.data as Product),
+      map((product: Product) => {
+        if (isDevMode()) {
+          product.images = product.images?.map(image => {
+            return ({
+              ...image,
+              url: `http://localhost:1337${image.url}`
+            })
+          });
+          return product;
+        } else {
+          return product;
+        }
+      })
     )
   }
 
