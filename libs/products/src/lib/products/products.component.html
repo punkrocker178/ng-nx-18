@@ -1,24 +1,44 @@
-<div *ngIf="product; else loading" class="product-details">
-  <h1>{{ product.name }}</h1>
-  <!-- <img [src]="product.images?.[0]" alt="{{ product.name }}" class="product-image" /> -->
+@if (product) {
+<div class="product-details">
+  <h1 class="p-4">{{ product.name }}</h1>
 
-  <div class="product-info">
-    <p><strong>Price:</strong> {{ product.price | currency }}</p>
-    <p *ngIf="product.priceDiscounted">
-      <strong>Discounted Price:</strong> {{ product.priceDiscounted | currency }}
-    </p>
-    <p><strong>Description:</strong> {{ product.description }}</p>
-    <p><strong>Stock:</strong> {{ product.stock > 0 ? product.stock : 'Out of Stock' }}</p>
-  </div>
+  <div class="d-flex flex-row">
+    <div class="d-flex flex-basis-50">
+      <div class="d-flex flex-col w-100">
+        <div class="product-image-main p-4">
+          <img [src]="selectedImage()?.url ||product.images?.[0]?.url" alt="{{ product.name }}" class="image" />
+        </div>
+        <div class="product-image-list p-4 flex-row d-flex">
+          @for (item of productImageList; track $index) {
+          <div class="image-list-item mr-1" tabindex="0" (click)="selectImage($index)" (keydown)="onKeydown($event)">
+            <img [src]="item.url" alt="{{ product.name }}" class="image" />
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-col flex-grow p-4">
+      <div class="product-info mb-4">
+        <div class="mb-1"><span class="text-bold">Category: </span>{{product.category?.name}}</div>
+        <div class="mb-1"><span class="text-bold">Price: </span>{{ product.price | currency }}</div>
+        @if (product.priceDiscounted) {
+        <div class="mb-1">
+          <span class="text-bold">Price:</span> {{ product.priceDiscounted | currency }}
+        </div>
+        }
+        <div class="mb-1"><span class="text-bold">Description: </span>{{ product.description }}</div>
+        <div class="mb-1"><span class="text-bold">Stock: </span>
+          {{ product.stock > 0 ? product.stock : 'Out of Stock' }}</div>
+      </div>
 
-  <div class="product-actions">
-    <button mat-flat-button [disabled]="product.stock <= 0" (click)="addToCart()">Add to Cart</button>
+      <div class="product-actions">
+        <button mat-flat-button [disabled]="product.stock <= 0" (click)="addToCart()">Add to Cart</button>
+      </div>
+    </div>
+
   </div>
 </div>
-
-<ng-template #loading>
-  <p>Loading product details...</p>
-</ng-template>
-
-
-
+}
+@else {
+<p>Loading product details...</p>
+}
