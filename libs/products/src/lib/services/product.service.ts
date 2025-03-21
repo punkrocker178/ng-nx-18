@@ -12,7 +12,7 @@ export class ProductService {
     private readonly _httpClient: HttpClient
   ) { }
 
-  public query(params: QueryRequest): Observable<DataQueryResponse<Product>> {
+  public query(params?: QueryRequest): Observable<DataQueryResponse<Product>> {
     return this._httpClient.get(this.BASE_URL, { params: { ...params } }).pipe(
       map(response => response as DataQueryResponse<Product>)
     );

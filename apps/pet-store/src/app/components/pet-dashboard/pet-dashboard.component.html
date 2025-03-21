@@ -1,1 +1,5 @@
-<p>pet-dashboard works!</p>
+<div class="container d-flex">
+  @for (product of products(); track product.documentId) {
+  <lib-product-card [product]="product"></lib-product-card>
+  }
+</div>
