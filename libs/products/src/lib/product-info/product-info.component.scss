@@ -1,15 +1,16 @@
 .product-image-main {
-  width: 60%;
+  height: 60vh;
   margin-left: auto;
   margin-right: auto;
 }
 
 .image {
   width: 100%;
-  height: auto; 
+  height: 100%;
 }
 
 .image-list-item {
   border: 1px solid #ccc;
   width: 5rem;
+  cursor: pointer;
 }
