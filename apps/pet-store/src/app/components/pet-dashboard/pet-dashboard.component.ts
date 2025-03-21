@@ -1,15 +1,12 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { RouterModule } from '@angular/router';
-import { ProductService, Product } from 'products';
+import { ProductService, Product, ProductCardComponent } from 'products';
 
 @Component({
   selector: 'app-pet-dashboard',
   standalone: true,
   imports: [
-    RouterModule,
-    MatCardModule
-  ],
+    ProductCardComponent
+],
   templateUrl: './pet-dashboard.component.html',
   styleUrl: './pet-dashboard.component.scss'
 })

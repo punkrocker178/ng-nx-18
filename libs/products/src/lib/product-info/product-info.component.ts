@@ -14,14 +14,14 @@ import { Image } from '../models/api/image.model';
     CommonModule,
     MatButtonModule
   ],
-  templateUrl: './products.component.html',
-  styleUrl: './products.component.scss',
+  templateUrl: './product-info.component.html',
+  styleUrl: './product-info.component.scss',
 })
 export class ProductComponent {
   productId = input<string>('');
   product: Product | null = null;
   productImageList: Image[] | undefined;
-  
+
   selectedImage: WritableSignal<Image | null> = signal(null);
 
   constructor(
@@ -58,7 +58,7 @@ export class ProductComponent {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   public onKeydown(event: KeyboardEvent): void {
-    console.log(event);
   }
 }

@@ -1,17 +1,5 @@
 <div class="container d-flex">
   @for (product of products(); track product.documentId) {
-  <mat-card class="product-card mr-2 mb-2" appearance="outlined" routerLink="/products/{{product.documentId}}">
-    <mat-card-header>
-      <mat-card-title>
-        <h2>{{ product.name }}</h2>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div>
-        <div>Price: {{product.price}}</div>
-        <div>Stock: {{product.stock}}</div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+  <lib-product-card [product]="product"></lib-product-card>
   }
 </div>
