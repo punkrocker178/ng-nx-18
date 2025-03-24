@@ -36,13 +36,12 @@
     </div>
 
   </div>
-  @if (product.description) {
+  @if (descriptionText) {
   <div>
     <h3>Description</h3>
-    @for (p of product.description; track $index) {
-      <p>{{p}}</p>
+    @for (p of descriptionText; track $index) {
+      <div [innerText]="p"></div>
     }
-    <!-- <div class="mb-1">{{ product.description }}</div> -->
   </div>
   }
 </div>

@@ -53,10 +53,10 @@ export class ProductComponent {
     let result: string[] = [];
     description.forEach((desc) => {
       if (desc.type === 'text') {
-        result = [result.concat(desc.text.replace(/\s/g, ' ').trim()).join(' ')];
+        result.push(desc.text);
       }
       if (desc.type === 'paragraph') {
-        result = result.concat(this._getRichTextDescription(desc.children), '\n');
+        result = result.concat(desc.children.map((child) => child.text.replace(/\r/g, '')).join(''), '\n');
       }
     });
     return result;
