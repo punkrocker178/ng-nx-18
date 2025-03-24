@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { QueryRequest } from '../models/api/query-request.model';
 import { delay } from 'rxjs';
 import { Image } from '../models/api/image.model';
+import { Description } from '../models/api/description.model';
 
 @Component({
   selector: 'lib-product',
@@ -21,6 +22,7 @@ export class ProductComponent {
   productId = input<string>('');
   product: Product | null = null;
   productImageList: Image[] | undefined;
+  descriptionText: string[] = [];
 
   selectedImage: WritableSignal<Image | null> = signal(null);
 
@@ -41,7 +43,23 @@ export class ProductComponent {
     this._productService.getDetails(this.productId(), queryRequest).pipe(delay(500)).subscribe((product: Product) => {
       this.product = product;
       this.productImageList = product.images;
+      if (product.description) {
+        this.descriptionText = this._getRichTextDescription(product.description);
+      }
     });
+  }
+
+  private _getRichTextDescription(description: Description[]): string[] {
+    let result: string[] = [];
+    description.forEach((desc) => {
+      if (desc.type === 'text') {
+        result.push(desc.text);
+      }
+      if (desc.type === 'paragraph') {
+        result = result.concat(desc.children.map((child) => child.text.replace(/\r/g, '')).join(''), '\n');
+      }
+    });
+    return result;
   }
 
   public addToCart(): void {

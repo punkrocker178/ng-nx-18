@@ -26,7 +26,6 @@
           <span class="text-bold">Price:</span> {{ product.priceDiscounted | currency }}
         </div>
         }
-        <div class="mb-1"><span class="text-bold">Description: </span>{{ product.description }}</div>
         <div class="mb-1"><span class="text-bold">Stock: </span>
           {{ product.stock > 0 ? product.stock : 'Out of Stock' }}</div>
       </div>
@@ -37,6 +36,14 @@
     </div>
 
   </div>
+  @if (descriptionText) {
+  <div>
+    <h3>Description</h3>
+    @for (p of descriptionText; track $index) {
+      <div [innerText]="p"></div>
+    }
+  </div>
+  }
 </div>
 }
 @else {
