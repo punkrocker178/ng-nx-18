@@ -1,4 +1,7 @@
 <main class="container">
+  @if (isLogin()) {
+  <router-outlet></router-outlet>
+  } @else {
   <mat-sidenav-container class="example-container">
     <mat-sidenav #sidenav mode="over">
       <mat-list>
@@ -16,6 +19,7 @@
       <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
+  }
 
   <app-footer></app-footer>
 </main>
