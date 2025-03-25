@@ -5,16 +5,18 @@ export class AuthenticationPayload {
 
 export class AuthenticationResponse {
   public jwt!: string;
-  public user!: {
-    id: number,
-    documentId: string,
-    username: string,
-    email: string,
-    provider: string,
-    confirmed: boolean,
-    blocked: boolean,
-    createdAt: string,
-    updatedAt: string,
-    publishedAt: string
-  }
+  public user!: User
+}
+
+export class User {
+  public id!: number;
+  public documentId!: string;
+  public username!: string;
+  public email!: string;
+  public provider!: string;
+  public confirmed!: boolean;
+  public blocked!: boolean;
+  public createdAt!: string;
+  public updatedAt!: string;
+  public publishedAt!: string
 }

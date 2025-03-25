@@ -1,6 +1,13 @@
 <nav>
   <div class="d-flex">
-    <img class="store-icon" src="img/icon1.png" alt="Pet Store icon" />
+    <div class="flex-grow">
+      <img class="store-icon" src="img/icon1.png" alt="Pet Store icon" />
+    </div>
+    @if (!user) {
     <button class="login-button" mat-flat-button routerLink="login">Login</button>
+    } @else {
+    <div class="username mr-2">{{user().username}}</div>
+    <button class="login-button" mat-flat-button >Logout</button>
+    }
   </div>
 </nav>
