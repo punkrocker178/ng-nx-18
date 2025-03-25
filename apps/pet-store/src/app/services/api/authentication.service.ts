@@ -26,6 +26,7 @@ export class AuthenticationService {
     return new Observable<boolean>((observer) => {
       if (this._localStorage.get('token')) {
         this._localStorage.remove('token');
+        this._localStorage.remove('user');
         observer.next(true);
       } else {
         observer.next(false);

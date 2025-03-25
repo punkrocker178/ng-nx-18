@@ -6,17 +6,17 @@ import { BehaviorSubject, Observable } from "rxjs";
   providedIn: 'root'
 })
 export class UserInfoContextService {
- private _userSubject: BehaviorSubject<User> = new BehaviorSubject<User>(new User());
+ private _userSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
 
- public setUser(user: User): void {
+ public setUser(user: User | null): void {
     this._userSubject.next(user);
  }
 
- public getUser(): Observable<User> {
+ public getUser(): Observable<User | null> {
     return this._userSubject.asObservable();
  }
 
- public getUserValue(): User {
+ public getUserValue(): User | null {
     return this._userSubject.getValue();
  }
 }
