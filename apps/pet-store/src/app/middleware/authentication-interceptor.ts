@@ -2,6 +2,8 @@ import { HttpEvent, HttpHandlerFn, HttpRequest } from "@angular/common/http";
 import { inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { catchError, EMPTY, Observable } from "rxjs";
+import { isClientSide } from "../utils/utils";
+import { CookieService } from "ngx-cookie-service";
 
 const acessTokenAPIs = ['/api/auth/local'];
 
@@ -12,8 +14,9 @@ export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
     return next(req);
   }
 
-  const token = localStorage.getItem('token');
+  const cookieService = inject(CookieService);
   const routerService = inject(Router);
+  const token = isClientSide() ? localStorage.getItem('token') : cookieService.get('token');
 
   if (token) {
     req = setToken(req, JSON.parse(token));

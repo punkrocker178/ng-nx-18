@@ -8,16 +8,12 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/pet-store",
         "index": "apps/pet-store/src/index.html",
         "browser": "apps/pet-store/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": ["zone.js"],
         "tsConfig": "apps/pet-store/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -35,7 +31,12 @@
           "apps/pet-store/src/styles/styles.scss",
           "libs/products/src/styles/shared-style.scss"
         ],
-        "scripts": []
+        "scripts": [],
+        "server": "apps/pet-store/src/main.server.ts",
+        "prerender": true,
+        "ssr": {
+          "entry": "apps/pet-store/server.ts"
+        }
       },
       "configurations": {
         "production": {
@@ -87,9 +88,7 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/pet-store/jest.config.ts"
       }

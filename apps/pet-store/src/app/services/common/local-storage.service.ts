@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
+import { isClientSide } from '../../utils/utils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageService {
-  private _localStorage: Storage;
+  private _localStorage: Storage | null = null;
 
   constructor() {
-    this._localStorage = window.localStorage;
+    if (isClientSide()) {
+      this._localStorage = window.localStorage;
+    }
   }
 
   set(key: string, value: any) {
-    if (this.isSupportLocalStorage()) {
+    if (this._localStorage) {
       this._localStorage.setItem(key, JSON.stringify(value));
       return true;
     }
@@ -20,7 +23,7 @@ export class LocalStorageService {
   }
 
   get(key: string) {
-    if (this.isSupportLocalStorage()) {
+    if (this._localStorage) {
       const value = this._localStorage.getItem(key);
       return value !== null && value !== undefined ? JSON.parse(value) : null;
     }
@@ -28,14 +31,11 @@ export class LocalStorageService {
   }
 
   remove(key: string) {
-    if (this.isSupportLocalStorage()) {
+    if (this._localStorage) {
       this._localStorage.removeItem(key);
       return true;
     }
     return false;
   }
 
-  isSupportLocalStorage() {
-    return !!this._localStorage;
-  }
 }

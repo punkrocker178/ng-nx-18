@@ -4,6 +4,8 @@ import { LocalStorageService } from '../../../services/common/local-storage.serv
 import { User } from '../../../models/api/authentication.model';
 import { filter, Subscription } from 'rxjs';
 import { AuthenticationService } from '../../../services/api/authentication.service';
+import { isClientSide } from '../../../utils/utils';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-navbar',
@@ -17,7 +19,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _userInforContextService: UserInfoContextService,
     private readonly _localStorage: LocalStorageService,
-    private readonly _authenticationService: AuthenticationService
+    private readonly _authenticationService: AuthenticationService,
+    private readonly _cookieService: CookieService
   ) {
 
   }
@@ -35,8 +38,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _getUserFromLocalStorage(): User {
-    return this._localStorage.get('user');
+  private _getUserData(): User {
+    console.log(this._cookieService.get('user'));
+    const user = this._cookieService.get('user');
+    return user ? JSON.parse(this._cookieService.get('user')) : null;
   }
 
   private _getUserFromContext(): void {
@@ -44,9 +49,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.user.set(user);
 
       if (!user) {
-        const userFromLocalStorage = this._getUserFromLocalStorage();
-        if (userFromLocalStorage) {
-          this.user.set(userFromLocalStorage);
+        const userData = this._getUserData();
+        if (userData) {
+          this.user.set(userData);
         }
       }
     });

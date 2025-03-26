@@ -6,7 +6,9 @@ import { AuthenticationService } from '../../services/api/authentication.service
 import { AuthenticationPayload } from '../../models/api/authentication.model';
 import { LocalStorageService } from '../../services/common/local-storage.service';
 import { Router } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import { UserInfoContextService } from '../../services/context/user-info-context.service';
+import { isClientSide } from '../../utils/utils';
 
 @Component({
   selector: 'app-login-page',
@@ -27,6 +29,7 @@ export class LoginPageComponent {
     private readonly _authService: AuthenticationService,
     private readonly _localStorage: LocalStorageService,
     private readonly _userInforContextService: UserInfoContextService,
+    private readonly _cookieService: CookieService,
     private readonly _router: Router
   ) { }
 
@@ -47,8 +50,9 @@ export class LoginPageComponent {
 
   private _authenticateBasic(payload: AuthenticationPayload): void {
     this._authService.authenticate(payload).subscribe((response) => {
-      this._localStorage.set('token', response.jwt);
-      this._localStorage.set('user', response.user);
+      this._cookieService.set('token', response.jwt);
+      this._cookieService.set('user', JSON.stringify(response.user));
+
       this._userInforContextService.setUser(response.user);
       this._router.navigate(['/']);
     });
