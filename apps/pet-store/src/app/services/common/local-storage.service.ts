@@ -1,14 +1,17 @@
-import { Injectable } from '@angular/core';
-import { isClientSide } from '../../utils/utils';
+import { isPlatformBrowser } from '@angular/common';
+import { inject, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { LOCAL_STORAGE } from '../../tokens';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageService {
-  private _localStorage: Storage | null = null;
+  private _localStorage: Storage | null = inject(LOCAL_STORAGE);
 
-  constructor() {
-    if (isClientSide()) {
+  constructor(
+    @Inject(PLATFORM_ID) private _platformId: string
+  ) {
+    if (isPlatformBrowser(PLATFORM_ID)) {
       this._localStorage = window.localStorage;
     }
   }

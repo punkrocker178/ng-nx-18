@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { UserInfoContextService } from '../../../services/context/user-info-context.service';
 import { LocalStorageService } from '../../../services/common/local-storage.service';
 import { User } from '../../../models/api/authentication.model';
 import { filter, Subscription } from 'rxjs';
 import { AuthenticationService } from '../../../services/api/authentication.service';
-import { isClientSide } from '../../../utils/utils';
 import { CookieService } from 'ngx-cookie-service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
@@ -20,7 +20,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private readonly _userInforContextService: UserInfoContextService,
     private readonly _localStorage: LocalStorageService,
     private readonly _authenticationService: AuthenticationService,
-    private readonly _cookieService: CookieService
+    private readonly _cookieService: CookieService,
+    @Inject(PLATFORM_ID) private _platformId: string
   ) {
 
   }
@@ -39,7 +40,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   private _getUserData(): User | null {
-    const user = this._cookieService.get('user');
+    const user = this._localStorage.get('user');
     return user ? JSON.parse(this._cookieService.get('user')) : null;
   }
 
@@ -47,7 +48,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.subscription = this._userInforContextService.getUser().subscribe((user) => {
       this.user.set(user);
 
-      if (!user) {
+      if (!user && isPlatformBrowser(this._platformId)) {
         const userData = this._getUserData();
         if (userData) {
           this.user.set(userData);

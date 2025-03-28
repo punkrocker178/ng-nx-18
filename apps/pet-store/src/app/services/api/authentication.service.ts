@@ -1,10 +1,10 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { map, Observable } from "rxjs";
+import { Inject, Injectable, PLATFORM_ID } from "@angular/core";
+import { filter, map, Observable, tap } from "rxjs";
 import { AuthenticationPayload, AuthenticationResponse } from "../../models/api/authentication.model";
 import { LocalStorageService } from "../common/local-storage.service";
-import { isClientSide } from "../../utils/utils";
 import { CookieService } from "ngx-cookie-service";
+import { isPlatformBrowser } from "@angular/common";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,8 @@ export class AuthenticationService {
   constructor(
     private _httpClient: HttpClient,
     private _localStorage: LocalStorageService,
-    private _cookieService: CookieService
+    private _cookieService: CookieService,
+    @Inject(PLATFORM_ID) private _platformId: string
   ) {
   }
 
@@ -26,20 +27,14 @@ export class AuthenticationService {
   }
 
   public logout(): Observable<boolean> {
-    return new Observable<boolean>((observer) => {
-      if (this._localStorage.get('token')) {
-        if (isClientSide()) {
-          this._localStorage.remove('token');
+    return this._httpClient.post(`/auth/logout`, {}).pipe(
+      map((response) => response as boolean),
+      filter((result) => !!result),
+      tap(() => {
+        if (isPlatformBrowser(this._platformId) && this._localStorage.get('user')) {
           this._localStorage.remove('user');
-        } else {
-          this._cookieService.delete('token');
-          this._cookieService.delete('user');
         }
-        observer.next(true);
-      } else {
-        observer.next(false);
-      }
-      observer.complete();
-    });
+      })
+    );
   }
 }

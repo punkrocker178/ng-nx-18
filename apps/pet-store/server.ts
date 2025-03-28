@@ -47,13 +47,20 @@ export function app(): express.Express {
       return `${url.parse(req.url).path}`;
     },
     userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
-      const data = JSON.parse(proxyResData.toString('utf8'));
-      userRes.cookie('token', data.jwt, { httpOnly: true });
-      console.log('Added token to cookies');
-      return proxyResData;
+      if (authApis.includes(userReq.url)) {
+        const data = JSON.parse(proxyResData.toString('utf8'));
+        userRes.cookie('token', data.jwt, { httpOnly: true, expires: new Date(Date.now() + 1000 * 60 * 60 * 24 ) });
+        console.log('Added token to cookies');
+        return proxyResData;
+      }
     }
   }
   );
+
+  server.post('/auth/logout', (req, res) => {
+    res.clearCookie('token');
+    res.send(true);
+  });
 
   // Proxy /api to strapi
   server.get('/api/**', proxyGetStrapiApi);
