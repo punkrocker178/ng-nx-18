@@ -50,8 +50,6 @@ export class LoginPageComponent {
 
   private _authenticateBasic(payload: AuthenticationPayload): void {
     this._authService.authenticate(payload).subscribe((response) => {
-      this._cookieService.set('token', response.jwt);
-      this._cookieService.set('user', JSON.stringify(response.user));
 
       this._userInforContextService.setUser(response.user);
       this._router.navigate(['/']);

@@ -49,5 +49,5 @@ const setToken = (request: HttpRequest<any>, token: string) => {
 }
 
 const handle401Error = (routerService: Router) => {
-  routerService.navigate(['/login']);
+  // routerService.navigate(['/login']);
 }

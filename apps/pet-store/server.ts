@@ -4,10 +4,17 @@ import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
+import cookieParser from 'cookie-parser';
+import proxy from 'express-http-proxy';
+import url from 'url';
+
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
+  server.use(cookieParser());
+  server.use(express.json());
+
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
   const browserDistFolder = resolve(serverDistFolder, '../browser');
   const indexHtml = join(serverDistFolder, 'index.server.html');
@@ -17,8 +24,40 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
+  const authApis = ['/api/auth/local', '/api/auth/register'];
+
+  const proxyGetStrapiApi = proxy('http://strapi:1337', {
+    proxyReqPathResolver: req => {
+      return `${url.parse(req.url).path}`;
+    },
+
+    userResHeaderDecorator: (headers, userReq, userRes, proxyReq, proxyRes) => {
+      // recieves an Object of headers, returns an Object of headers.
+      if (userReq.cookies['token'] && !authApis.includes(userReq.url)) {
+        headers['Authorization'] = `Bearer ${userReq.cookies['token']}`;
+        console.log('Added token to headers');
+      }
+      return headers;
+    }
+  }
+  );
+
+  const proxyPostStrapiApi = proxy('http://strapi:1337', {
+    proxyReqPathResolver: req => {
+      return `${url.parse(req.url).path}`;
+    },
+    userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
+      const data = JSON.parse(proxyResData.toString('utf8'));
+      userRes.cookie('token', data.jwt, { httpOnly: true });
+      console.log('Added token to cookies');
+      return proxyResData;
+    }
+  }
+  );
+
+  // Proxy /api to strapi
+  server.get('/api/**', proxyGetStrapiApi);
+  server.post('/api/**', proxyPostStrapiApi);
   // Serve static files from /browser
   server.get(
     '**',
@@ -31,7 +70,6 @@ export function app(): express.Express {
   // All regular routes use the Angular engine
   server.get('**', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
-
     commonEngine
       .render({
         bootstrap,

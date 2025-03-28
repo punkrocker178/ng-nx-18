@@ -38,8 +38,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _getUserData(): User {
-    console.log(this._cookieService.get('user'));
+  private _getUserData(): User | null {
     const user = this._cookieService.get('user');
     return user ? JSON.parse(this._cookieService.get('user')) : null;
   }
