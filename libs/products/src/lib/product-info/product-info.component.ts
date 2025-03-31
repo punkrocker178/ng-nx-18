@@ -9,14 +9,13 @@ import { Image } from '../models/api/image.model';
 import { Description } from '../models/api/description.model';
 
 @Component({
-  selector: 'lib-product',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule
-  ],
-  templateUrl: './product-info.component.html',
-  styleUrl: './product-info.component.scss',
+    selector: 'lib-product',
+    imports: [
+        CommonModule,
+        MatButtonModule
+    ],
+    templateUrl: './product-info.component.html',
+    styleUrl: './product-info.component.scss'
 })
 export class ProductComponent {
   productId = input<string>('');
