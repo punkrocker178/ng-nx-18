@@ -3,11 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ProductComponent } from 'products';
 
 @Component({
-  selector: 'app-product-details',
-  standalone: true,
-  imports: [ProductComponent],
-  templateUrl: './product-details.component.html',
-  styleUrl: './product-details.component.scss'
+    selector: 'app-product-details',
+    imports: [ProductComponent],
+    templateUrl: './product-details.component.html',
+    styleUrl: './product-details.component.scss'
 })
 export class ProductDetailsComponent {
   public productId!: string;

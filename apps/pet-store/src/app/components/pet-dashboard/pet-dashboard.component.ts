@@ -2,13 +2,12 @@ import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProductService, Product, ProductCardComponent } from 'products';
 
 @Component({
-  selector: 'app-pet-dashboard',
-  standalone: true,
-  imports: [
-    ProductCardComponent
-],
-  templateUrl: './pet-dashboard.component.html',
-  styleUrl: './pet-dashboard.component.scss'
+    selector: 'app-pet-dashboard',
+    imports: [
+        ProductCardComponent
+    ],
+    templateUrl: './pet-dashboard.component.html',
+    styleUrl: './pet-dashboard.component.scss'
 })
 export class PetDashboardComponent implements OnInit {
   products: WritableSignal<Product[]> = signal([]);

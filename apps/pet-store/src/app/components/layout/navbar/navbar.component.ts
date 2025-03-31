@@ -4,13 +4,14 @@ import { LocalStorageService } from '../../../services/common/local-storage.serv
 import { User } from '../../../models/api/authentication.model';
 import { filter, Subscription } from 'rxjs';
 import { AuthenticationService } from '../../../services/api/authentication.service';
-import { CookieService } from 'ngx-cookie-service';
+import { SsrCookieService } from 'ngx-cookie-service-ssr';
 import { isPlatformBrowser } from '@angular/common';
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+    selector: 'app-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrl: './navbar.component.scss',
+    standalone: false
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   public user = signal<User | null>(null);
@@ -20,7 +21,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private readonly _userInforContextService: UserInfoContextService,
     private readonly _localStorage: LocalStorageService,
     private readonly _authenticationService: AuthenticationService,
-    private readonly _cookieService: CookieService,
+    private readonly _cookieService: SsrCookieService,
     @Inject(PLATFORM_ID) private _platformId: string
   ) {
 
