@@ -9,15 +9,14 @@ import { Router } from '@angular/router';
 import { UserInfoContextService } from '../../services/context/user-info-context.service';
 
 @Component({
-  selector: 'app-login-page',
-  standalone: true,
-  imports: [
-    MatInputModule,
-    MatButtonModule,
-    ReactiveFormsModule
-  ],
-  templateUrl: './login-page.component.html',
-  styleUrl: './login-page.component.scss'
+    selector: 'app-login-page',
+    imports: [
+        MatInputModule,
+        MatButtonModule,
+        ReactiveFormsModule
+    ],
+    templateUrl: './login-page.component.html',
+    styleUrl: './login-page.component.scss'
 })
 export class LoginPageComponent {
   /**

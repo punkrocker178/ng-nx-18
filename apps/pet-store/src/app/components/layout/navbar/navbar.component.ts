@@ -6,9 +6,10 @@ import { filter, Subscription } from 'rxjs';
 import { AuthenticationService } from '../../../services/api/authentication.service';
 
 @Component({
-  selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+    selector: 'app-navbar',
+    templateUrl: './navbar.component.html',
+    styleUrl: './navbar.component.scss',
+    standalone: false
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   public user = signal<User | null>(null);
