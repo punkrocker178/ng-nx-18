@@ -42,7 +42,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   private _getUserData(): User | null {
     const user = this._localStorage.get('user');
-    return user ? JSON.parse(this._cookieService.get('user')) : null;
+    return user ? user : null;
   }
 
   private _getUserFromContext(): void {

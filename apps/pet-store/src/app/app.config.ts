@@ -4,7 +4,6 @@ import { appRoutes } from './app.routes';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { LOCAL_STORAGE } from './tokens';
-import { httpInterceptor } from './middleware/authentication-interceptor';
 import {
   provideClientHydration,
   withEventReplay,
@@ -17,8 +16,8 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     provideHttpClient(
-      withFetch(),
-      withInterceptors([httpInterceptor])),
+      withFetch()
+    ),
     provideAnimationsAsync(),
     {
       provide: LOCAL_STORAGE,
