@@ -4,14 +4,19 @@ import {
   isMainModule,
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
+import cookieParser from 'cookie-parser';
 import express from 'express';
+import proxy from 'express-http-proxy';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import url from 'url';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 
 const app = express();
+app.use(cookieParser());
+app.use(express.json());
 const angularApp = new AngularNodeAppEngine();
 
 /**
@@ -26,6 +31,47 @@ const angularApp = new AngularNodeAppEngine();
  * ```
  */
 
+const authApis = ['/api/auth/local', '/api/auth/register'];
+
+const proxyGetStrapiApi = proxy('http://strapi:1337', {
+  proxyReqPathResolver: req => {
+    return `${url.parse(req.url).path}`;
+  },
+
+  userResHeaderDecorator: (headers, userReq, userRes, proxyReq, proxyRes) => {
+    // recieves an Object of headers, returns an Object of headers.
+    if (userReq.cookies['token'] && !authApis.includes(userReq.url)) {
+      headers['Authorization'] = `Bearer ${userReq.cookies['token']}`;
+      console.log('Added token to headers');
+    }
+    return headers;
+  }
+}
+);
+
+const proxyPostStrapiApi = proxy('http://strapi:1337', {
+  proxyReqPathResolver: req => {
+    return `${url.parse(req.url).path}`;
+  },
+  userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
+    if (authApis.includes(userReq.url)) {
+      const data = JSON.parse(proxyResData.toString('utf8'));
+      userRes.cookie('token', data.jwt, { httpOnly: true, expires: new Date(Date.now() + 1000 * 60 * 60 * 24) });
+      console.log('Added token to cookies');
+      return proxyResData;
+    }
+  }
+}
+);
+
+app.post('/auth/logout', (req, res) => {
+  res.clearCookie('token');
+  res.send(true);
+});
+
+// Proxy /api to strapi
+app.get('/api/**', proxyGetStrapiApi);
+app.post('/api/**', proxyPostStrapiApi);
 /**
  * Serve static files from /browser
  */

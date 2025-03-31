@@ -16,7 +16,9 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
-    provideHttpClient(withInterceptors([httpInterceptor])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([httpInterceptor])),
     provideAnimationsAsync(),
     {
       provide: LOCAL_STORAGE,
