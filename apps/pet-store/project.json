@@ -36,7 +36,8 @@
         "ssr": {
           "entry": "apps/pet-store/src/server.ts"
         },
-        "prerender": true
+        "prerender": true,
+        "outputMode": "server"
       },
       "configurations": {
         "production": {
