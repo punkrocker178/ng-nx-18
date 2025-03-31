@@ -23,7 +23,6 @@ export class PetDashboardComponent implements OnInit {
     }
     ).subscribe((products) => {
       this.products.set(products.data);
-      console.log(this.products())
     });
   }
 }

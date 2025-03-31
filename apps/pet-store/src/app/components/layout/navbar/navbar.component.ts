@@ -1,9 +1,11 @@
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { UserInfoContextService } from '../../../services/context/user-info-context.service';
 import { LocalStorageService } from '../../../services/common/local-storage.service';
 import { User } from '../../../models/api/authentication.model';
 import { filter, Subscription } from 'rxjs';
 import { AuthenticationService } from '../../../services/api/authentication.service';
+import { SsrCookieService } from 'ngx-cookie-service-ssr';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
     selector: 'app-navbar',
@@ -18,7 +20,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
   constructor(
     private readonly _userInforContextService: UserInfoContextService,
     private readonly _localStorage: LocalStorageService,
-    private readonly _authenticationService: AuthenticationService
+    private readonly _authenticationService: AuthenticationService,
+    private readonly _cookieService: SsrCookieService,
+    @Inject(PLATFORM_ID) private _platformId: string
   ) {
 
   }
@@ -36,18 +40,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _getUserFromLocalStorage(): User {
-    return this._localStorage.get('user');
+  private _getUserData(): User | null {
+    const user = this._localStorage.get('user');
+    return user ? user : null;
   }
 
   private _getUserFromContext(): void {
     this.subscription = this._userInforContextService.getUser().subscribe((user) => {
       this.user.set(user);
 
-      if (!user) {
-        const userFromLocalStorage = this._getUserFromLocalStorage();
-        if (userFromLocalStorage) {
-          this.user.set(userFromLocalStorage);
+      if (!user && isPlatformBrowser(this._platformId)) {
+        const userData = this._getUserData();
+        if (userData) {
+          this.user.set(userData);
         }
       }
     });

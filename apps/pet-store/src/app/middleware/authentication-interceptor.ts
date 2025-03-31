@@ -12,17 +12,11 @@ export function httpInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
     return next(req);
   }
 
-  const token = localStorage.getItem('token');
   const routerService = inject(Router);
-
-  if (token) {
-    req = setToken(req, JSON.parse(token));
-  }
 
   return next(req).pipe(
     catchError((error) => {
       if (error.status === 401) {
-        handle401Error(routerService);
         return EMPTY;
       }
       throw error;
@@ -37,14 +31,4 @@ const isValidRequestToIntercept = (url: string): boolean => {
   }
 
   return true;
-}
-
-const setToken = (request: HttpRequest<any>, token: string) => {
-  return request.clone({
-    headers: request.headers.set('Authorization', `Bearer ${token}`)
-  });
-}
-
-const handle401Error = (routerService: Router) => {
-  routerService.navigate(['/login']);
 }
