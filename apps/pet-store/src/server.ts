@@ -37,14 +37,15 @@ const proxyGetStrapiApi = proxy('http://strapi:1337', {
   proxyReqPathResolver: req => {
     return `${url.parse(req.url).path}`;
   },
-
-  userResHeaderDecorator: (headers, userReq, userRes, proxyReq, proxyRes) => {
+  proxyReqOptDecorator: (proxyReqOpts, userReq) => {
     // recieves an Object of headers, returns an Object of headers.
     if (userReq.cookies['token'] && !authApis.includes(userReq.url)) {
-      headers['Authorization'] = `Bearer ${userReq.cookies['token']}`;
-      console.log('Added token to headers');
+      if (proxyReqOpts.headers) {
+        proxyReqOpts.headers['Authorization'] = `Bearer ${userReq.cookies['token']}`;
+        console.log('Added token to headers');
+      }
     }
-    return headers;
+    return proxyReqOpts;
   }
 }
 );
