@@ -9,6 +9,7 @@ import {
   withEventReplay,
 } from '@angular/platform-browser';
 import { isPlatformServer } from '@angular/common';
+import { httpInterceptor } from './middleware/authentication-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,7 +17,10 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(appRoutes),
     provideHttpClient(
-      withFetch()
+      withFetch(),
+      withInterceptors([
+        httpInterceptor
+      ])
     ),
     provideAnimationsAsync(),
     {

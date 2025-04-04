@@ -22,6 +22,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private readonly _localStorage: LocalStorageService,
     private readonly _authenticationService: AuthenticationService,
     private readonly _cookieService: SsrCookieService,
+    private readonly _ssrCookieService: SsrCookieService,
     @Inject(PLATFORM_ID) private _platformId: string
   ) {
 
@@ -48,8 +49,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private _getUserFromContext(): void {
     this.subscription = this._userInforContextService.getUser().subscribe((user) => {
       this.user.set(user);
-
-      if (!user && isPlatformBrowser(this._platformId)) {
+      const tokenCookie = this._ssrCookieService.get('token-date');
+      if (!user && isPlatformBrowser(this._platformId) && tokenCookie) {
         const userData = this._getUserData();
         if (userData) {
           this.user.set(userData);
