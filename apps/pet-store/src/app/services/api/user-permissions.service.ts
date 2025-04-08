@@ -34,8 +34,9 @@ export class UserPermissionsService {
   public getRoleDetails(roleId: string): Observable<UserPermission> {
     return this._httpClient.get(`${this.BASE_URL}/roles/${roleId}`).pipe(
       map((response: any) => {
+        const role = response['role'];
         const permissions: UserPermission = new UserPermission();
-        for (const [key, value] of Object.entries(response['permissions'])) {
+        for (const [key, value] of Object.entries(role['permissions'])) {
           const entity = key.split('::')[1];
 
           if (key.startsWith(this.PERMISSION_TYPE.API)) {
