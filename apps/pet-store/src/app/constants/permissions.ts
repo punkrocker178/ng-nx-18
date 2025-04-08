@@ -6,5 +6,7 @@ export const PERMISSION_ACTION = {
   delete: 'delete',
 };
 
+export const PERMISSION_ACTION_DELIMITER = '-';
 export const PERMISSION_API_PRODUCT = 'api::product';
 export const PERMISSION_API_PRODUCT_CATEGORY = 'api::product-category';
+

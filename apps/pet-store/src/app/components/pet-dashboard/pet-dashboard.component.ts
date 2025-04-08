@@ -1,17 +1,23 @@
-import { Component, effect, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProductService, Product, ProductCardComponent } from 'products';
-import { UserPermissionContextService } from '../../services/context/user-permission-context.service';
+import { MatButtonModule } from '@angular/material/button';
+import { FeatureGuardDirective } from '../../directives/feature-guard.directive';
+import { PERMISSION_ACTION, PERMISSION_API_PRODUCT } from '../../constants/permissions';
 
 @Component({
   selector: 'app-pet-dashboard',
   imports: [
-    ProductCardComponent
+    ProductCardComponent,
+    MatButtonModule,
+    FeatureGuardDirective
   ],
   templateUrl: './pet-dashboard.component.html',
   styleUrl: './pet-dashboard.component.scss'
 })
 export class PetDashboardComponent implements OnInit {
   products: WritableSignal<Product[]> = signal([]);
+
+ readonly ADD_PRODUCT_PERMISSION = `${PERMISSION_API_PRODUCT}-${PERMISSION_ACTION.create}`;
 
 constructor(
   private readonly _productService: ProductService
