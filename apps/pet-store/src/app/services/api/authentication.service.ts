@@ -1,10 +1,9 @@
-import { HttpClient } from "@angular/common/http";
-import { Inject, Injectable, PLATFORM_ID } from "@angular/core";
-import { filter, map, Observable, tap } from "rxjs";
-import { AuthenticationPayload, AuthenticationResponse } from "../../models/api/authentication.model";
-import { LocalStorageService } from "../common/local-storage.service";
-import { SsrCookieService } from "ngx-cookie-service-ssr";
-import { isPlatformBrowser } from "@angular/common";
+import { HttpClient } from '@angular/common/http';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { filter, map, Observable, tap } from 'rxjs';
+import { AuthenticationPayload, AuthenticationResponse } from '../../models/api/authentication.model';
+import { LocalStorageService } from '../common/local-storage.service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +14,6 @@ export class AuthenticationService {
   constructor(
     private _httpClient: HttpClient,
     private _localStorage: LocalStorageService,
-    private _cookieService: SsrCookieService,
     @Inject(PLATFORM_ID) private _platformId: string
   ) {
   }
