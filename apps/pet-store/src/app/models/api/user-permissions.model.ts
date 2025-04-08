@@ -3,6 +3,7 @@ export class UserPermission {
 }
 
 export class Permission {
+  [key: string]: PermissionAction;
   public find!: PermissionAction;
   public findOne!: PermissionAction;
   public create!: PermissionAction;

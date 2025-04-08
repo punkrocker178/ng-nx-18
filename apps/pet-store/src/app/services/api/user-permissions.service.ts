@@ -1,8 +1,8 @@
-import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { QueryRequest } from "products";
-import { map, Observable, switchMap } from "rxjs";
-import { Permission, UserPermission } from "../../models/api/user-permissions.model";
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { QueryRequest } from 'products';
+import { map, Observable, switchMap } from 'rxjs';
+import { Permission, UserPermission } from '../../models/api/user-permissions.model';
 
 @Injectable({
   providedIn: 'root'
