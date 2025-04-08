@@ -30,11 +30,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     if (isPlatformBrowser(this._platformId)) {
-      this._userPermissionsService.getUserPermissions().pipe(
-        finalize(() => this.isLoading.set(false))
-      ).subscribe((permissions: any) => {
-        this._userPermissionContextService.setUserPermissions(permissions);
-      });
+      this._initializeBrowserApp();
     }
+  }
+
+  private _initializeBrowserApp(): void {
+    this._userPermissionsService.getUserPermissions().pipe(
+      finalize(() => this.isLoading.set(false))
+    ).subscribe((permissions: any) => {
+      this._userPermissionContextService.setUserPermissions(permissions);
+    });
   }
 }

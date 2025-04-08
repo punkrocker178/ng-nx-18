@@ -1,4 +1,4 @@
-import { computed, Directive, effect, ElementRef, input, Input, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
+import { computed, Directive, effect, ElementRef, input } from '@angular/core';
 import { UserPermissionContextService } from '../services/context/user-permission-context.service';
 import { PERMISSION_ACTION_DELIMITER } from '../constants/permissions';
 
@@ -14,7 +14,6 @@ export class FeatureGuardDirective {
     private _elementRef: ElementRef,
     private userPermissionContextService: UserPermissionContextService
   ) {
-    console.log('FeatureGuardDirective initialized');
     effect(() => {
       if (this.requiredPermissions() !== undefined) {
         this._checkPermissions(this.requiredPermissions() as string[]);
