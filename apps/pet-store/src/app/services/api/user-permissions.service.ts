@@ -26,11 +26,16 @@ export class UserPermissionsService {
     } as QueryRequest;
     return this._httpClient.get('/api/users/me', { params: { ...payload } }).pipe(
       switchMap((response: any) => {
-        return this._httpClient.get(`${this.BASE_URL}/roles/${response.role.id}`);
-      }),
-      map((response: Record<string, any>) => {
+        return this.getRoleDetails(response.role.id);
+      })
+    );
+  }
+
+  public getRoleDetails(roleId: string): Observable<UserPermission> {
+    return this._httpClient.get(`${this.BASE_URL}/roles/${roleId}`).pipe(
+      map((response: any) => {
         const permissions: UserPermission = new UserPermission();
-        for (const [key, value] of Object.entries(response['role']['permissions'])) {
+        for (const [key, value] of Object.entries(response['permissions'])) {
           const entity = key.split('::')[1];
 
           if (key.startsWith(this.PERMISSION_TYPE.API)) {
@@ -38,8 +43,7 @@ export class UserPermissionsService {
           }
         }
         return permissions;
-      }
-      )
+      })
     );
   }
 

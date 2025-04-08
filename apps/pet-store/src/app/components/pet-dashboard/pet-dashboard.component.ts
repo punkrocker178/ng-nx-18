@@ -1,15 +1,13 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProductService, Product, ProductCardComponent } from 'products';
 import { MatButtonModule } from '@angular/material/button';
-import { FeatureGuardDirective } from '../../directives/feature-guard.directive';
 import { PERMISSION_ACTION, PERMISSION_API_PRODUCT } from '../../constants/permissions';
 
 @Component({
   selector: 'app-pet-dashboard',
   imports: [
     ProductCardComponent,
-    MatButtonModule,
-    FeatureGuardDirective
+    MatButtonModule
   ],
   templateUrl: './pet-dashboard.component.html',
   styleUrl: './pet-dashboard.component.scss'
