@@ -37,14 +37,15 @@ const proxyGetStrapiApi = proxy('http://strapi:1337', {
   proxyReqPathResolver: req => {
     return `${url.parse(req.url).path}`;
   },
-
-  userResHeaderDecorator: (headers, userReq, userRes, proxyReq, proxyRes) => {
+  proxyReqOptDecorator: (proxyReqOpts, userReq) => {
     // recieves an Object of headers, returns an Object of headers.
     if (userReq.cookies['token'] && !authApis.includes(userReq.url)) {
-      headers['Authorization'] = `Bearer ${userReq.cookies['token']}`;
-      console.log('Added token to headers');
+      if (proxyReqOpts.headers) {
+        proxyReqOpts.headers['Authorization'] = `Bearer ${userReq.cookies['token']}`;
+        console.log('Added token to headers');
+      }
     }
-    return headers;
+    return proxyReqOpts;
   }
 }
 );
@@ -56,7 +57,10 @@ const proxyPostStrapiApi = proxy('http://strapi:1337', {
   userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
     if (authApis.includes(userReq.url)) {
       const data = JSON.parse(proxyResData.toString('utf8'));
-      userRes.cookie('token', data.jwt, { httpOnly: true, expires: new Date(Date.now() + 1000 * 60 * 60 * 24) });
+      const expiry = Date.now() + 1000 * 60 * 60 * 24;
+      // userRes.cookie('token', data.jwt, { httpOnly: true, expires: new Date(Date.now() + 1000 * 60 * 60 * 24) });
+      userRes.cookie('token', data.jwt, { httpOnly: true, expires: new Date(expiry) });
+      userRes.cookie(`token-date`, expiry, { expires: new Date(expiry) });
       console.log('Added token to cookies');
       return proxyResData;
     }
@@ -66,6 +70,7 @@ const proxyPostStrapiApi = proxy('http://strapi:1337', {
 
 app.post('/auth/logout', (req, res) => {
   res.clearCookie('token');
+  res.clearCookie('token-date');
   res.send(true);
 });
 
