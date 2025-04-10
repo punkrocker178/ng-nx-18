@@ -21,7 +21,23 @@ export class ProductService {
   public queryWithStringParams(params?: string): Observable<DataQueryResponse<Product>> {
     const urlParams = params ? `${this.BASE_URL}?${params}` : this.BASE_URL;
     return this._httpClient.get(urlParams).pipe(
-      map(response => response as DataQueryResponse<Product>)
+      map(response => response as DataQueryResponse<Product>),
+      map((response) => {
+        if (isDevMode()) {
+          response.data = response.data.map(product => {
+            product.images = product.images?.map(image => {
+              return ({
+                ...image,
+                url: `http://localhost:1337${image.url}`
+              })
+            });
+            return product;
+          });
+          return response;
+        } else {
+          return response;
+        }
+      })
     );
   }
 

@@ -1,1 +1,14 @@
-<p>search-bar works!</p>
+<mat-form-field appearance="outline">
+  <input matInput [formControl]="searchControl" [matAutocomplete]="auto" />
+  <mat-autocomplete #auto="matAutocomplete">
+    @for (option of filteredProducts(); track option.id) {
+    <mat-option [value]="option.name">
+      @if (option.images?.length) {
+        <img class="img-thumbnail" [src]="option.images? option.images[0]?.url : ''" alt="{{ option.name }}" />
+      }
+      <span>{{ option.name }}</span>
+      <span *ngIf="option.price"> - {{ option.price | currency }}</span>
+    </mat-option>
+    }
+  </mat-autocomplete>
+</mat-form-field>
