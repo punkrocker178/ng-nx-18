@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable, isDevMode } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { Product } from "../models/api/product.model";
@@ -12,14 +12,21 @@ export class ProductService {
     private readonly _httpClient: HttpClient
   ) { }
 
-  public query(params?: QueryRequest): Observable<DataQueryResponse<Product>> {
-    return this._httpClient.get(this.BASE_URL, { params: { ...params } }).pipe(
+  public query(params?: QueryRequest | HttpParams): Observable<DataQueryResponse<Product>> {
+    return this._httpClient.get(this.BASE_URL, { params: params as any }).pipe(
+      map(response => response as DataQueryResponse<Product>)
+    );
+  }
+
+  public queryWithStringParams(params?: string): Observable<DataQueryResponse<Product>> {
+    const urlParams = params ? `${this.BASE_URL}?${params}` : this.BASE_URL;
+    return this._httpClient.get(urlParams).pipe(
       map(response => response as DataQueryResponse<Product>)
     );
   }
 
   public getDetails(id: string, params?: QueryRequest): Observable<Product> {
-    return this._httpClient.get(`${this.BASE_URL}/${id}`, { params: { ...params } }).pipe(
+    return this._httpClient.get(`${this.BASE_URL}/${id}`, { params: params as any }).pipe(
       map((response: any) => response.data as Product),
       map((product: Product) => {
         if (isDevMode()) {

@@ -7,6 +7,7 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MatListModule } from "@angular/material/list";
+import { SearchBarComponent } from '../search-bar/search-bar.component';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { MatListModule } from "@angular/material/list";
     MatSidenavModule,
     MatIconModule,
     MatButtonModule,
-    MatListModule
+    MatListModule,
+    SearchBarComponent
   ],
   declarations: [
     LayoutComponent,
