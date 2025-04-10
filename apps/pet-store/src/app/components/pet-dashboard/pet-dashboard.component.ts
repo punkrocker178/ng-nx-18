@@ -15,20 +15,19 @@ import { PERMISSION_ACTION, PERMISSION_API_PRODUCT } from '../../constants/permi
 export class PetDashboardComponent implements OnInit {
   products: WritableSignal<Product[]> = signal([]);
 
- readonly ADD_PRODUCT_PERMISSION = `${PERMISSION_API_PRODUCT}-${PERMISSION_ACTION.create}`;
+  readonly ADD_PRODUCT_PERMISSION = `${PERMISSION_API_PRODUCT}-${PERMISSION_ACTION.create}`;
 
-constructor(
-  private readonly _productService: ProductService
-) {
-}
-
-ngOnInit(): void {
-  this._productService.query({
-    populate: ['category', 'images']
+  constructor(
+    private readonly _productService: ProductService
+  ) {
   }
-  ).subscribe((products) => {
-    this.products.set(products.data);
-  });
 
-}
+  ngOnInit(): void {
+    this._productService.query({
+      populate: ['category', 'images']
+    }
+    ).subscribe((products) => {
+      this.products.set(products.data);
+    });
+  }
 }
