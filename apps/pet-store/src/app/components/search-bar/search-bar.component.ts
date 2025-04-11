@@ -6,6 +6,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import QueryString from 'qs';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-bar',
@@ -24,7 +25,8 @@ export class SearchBarComponent implements OnInit, OnDestroy{
   public subscription: Subscription | undefined;
 
   constructor(
-    private readonly _productService: ProductService,
+    private readonly _router: Router,
+    private readonly _productService: ProductService
   ) {
   }
 
@@ -61,6 +63,10 @@ export class SearchBarComponent implements OnInit, OnDestroy{
     this._productService.queryWithStringParams(stringParams).subscribe((response) => {
       this.filteredProducts.set(response.data);
     });
+  }
+
+  public navigateToDetails(productId: string): void {
+    this._router.navigateByUrl(`/products/${productId}`);
   }
 
 }

@@ -2,7 +2,7 @@
   <input matInput [formControl]="searchControl" [matAutocomplete]="auto" />
   <mat-autocomplete #auto="matAutocomplete">
     @for (option of filteredProducts(); track option.id) {
-    <mat-option [value]="option.name">
+    <mat-option [value]="option.name" (click)="navigateToDetails(option.documentId)">
       @if (option.images?.length) {
         <img class="img-thumbnail" [src]="option.images? option.images[0]?.url : ''" alt="{{ option.name }}" />
       }
