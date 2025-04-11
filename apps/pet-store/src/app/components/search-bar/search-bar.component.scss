@@ -1,4 +1,22 @@
+@use '@angular/material' as mat;
+
+.row-container {
+  height: 4rem;
+}
+
+.thumbnail-container {
+  width: 4rem;
+  height: 100%;
+  overflow: hidden;
+}
+
 .img-thumbnail {
-  max-width: 100px;
+  width: 100%;
   height: auto;
+}
+
+:host {
+  @include mat.form-field-overrides((
+    subscript-text-line-height: 0
+  ));
 }

@@ -1,14 +1,19 @@
 <nav>
   <div class="d-flex">
-    <div class="flex-grow">
+    <div class="flex-grow-1 d-flex flex-basis-0">
       <img class="store-icon" src="img/icon1.png" alt="Pet Store icon" />
     </div>
-    @if (!user()) {
-    <button class="login-button" mat-flat-button routerLink="login">Login</button>
-    } @else {
-    <div class="username mr-2">{{user()?.username}}</div>
-    <button class="login-button" mat-flat-button (click)="logout()">Logout</button>
-    }
+    <div class="flex-grow-2">
+      <app-search-bar></app-search-bar>
+    </div>
+
+    <div class="flex-grow-1 flex-basis-0 d-flex justify-content-end">
+      @if (!user()) {
+      <button class="login-button" mat-flat-button routerLink="login">Login</button>
+      } @else {
+      <div class="username mr-2">{{user()?.username}}</div>
+      <button class="login-button" mat-flat-button (click)="logout()">Logout</button>
+      }
+    </div>
   </div>
-  <app-search-bar></app-search-bar>
 </nav>
