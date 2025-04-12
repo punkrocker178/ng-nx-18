@@ -1,0 +1,20 @@
+<mat-form-field appearance="outline" class="w-100">
+  <input matInput [formControl]="searchControl" [matAutocomplete]="auto" />
+  <mat-autocomplete #auto="matAutocomplete" hideSingleSelectionIndicator="true">
+    @for (option of filteredProducts(); track option.id) {
+    <mat-option [value]="option.name" (click)="navigateToDetails(option.documentId)">
+      <div class="d-flex flex-row row-container mb-1">
+        @if (option.images?.length) {
+        <div class="thumbnail-container mr-2">
+          <img class="img-thumbnail" [src]="option.images? option.images[0]?.url : ''" alt="{{ option.name }}" />
+        </div>
+        }
+        <div class="d-flex flex-col">
+          <div>{{ option.name }}</div>
+          <div>{{ option.price | currency }}</div>
+        </div>
+      </div>
+    </mat-option>
+    }
+  </mat-autocomplete>
+</mat-form-field>

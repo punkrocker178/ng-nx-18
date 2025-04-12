@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { QueryRequest } from 'products';
+import { HttpParamsQueryRequest } from 'products';
 import { map, Observable, switchMap } from 'rxjs';
 import { Permission, UserPermission } from '../../models/api/user-permissions.model';
 
@@ -23,8 +23,8 @@ export class UserPermissionsService {
   public getUserPermissions(): Observable<UserPermission> {
     const payload = {
       populate: 'role'
-    } as QueryRequest;
-    return this._httpClient.get('/api/users/me', { params: { ...payload } }).pipe(
+    } as HttpParamsQueryRequest;
+    return this._httpClient.get('/api/users/me', { params: payload as any }).pipe(
       switchMap((response: any) => {
         return this.getRoleDetails(response.role.id);
       })
