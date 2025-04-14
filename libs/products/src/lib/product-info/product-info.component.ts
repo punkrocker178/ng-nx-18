@@ -1,4 +1,4 @@
-import { Component, effect, input, isDevMode, signal, WritableSignal } from '@angular/core';
+import { Component, effect, input, isDevMode, output, signal, WritableSignal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from '../models/api/product.model';
 import { ProductService } from '../services/product.service';
@@ -9,13 +9,13 @@ import { Image } from '../models/api/image.model';
 import { Description } from '../models/api/description.model';
 
 @Component({
-    selector: 'lib-product',
-    imports: [
-        CommonModule,
-        MatButtonModule
-    ],
-    templateUrl: './product-info.component.html',
-    styleUrl: './product-info.component.scss'
+  selector: 'lib-product',
+  imports: [
+    CommonModule,
+    MatButtonModule
+  ],
+  templateUrl: './product-info.component.html',
+  styleUrl: './product-info.component.scss'
 })
 export class ProductComponent {
   productId = input<string>('');
@@ -24,6 +24,8 @@ export class ProductComponent {
   descriptionText: string[] = [];
 
   selectedImage: WritableSignal<Image | null> = signal(null);
+
+  emitProductAdded = output<Product>();
 
   constructor(
     private _productService: ProductService
@@ -62,7 +64,9 @@ export class ProductComponent {
   }
 
   public addToCart(): void {
-    console.log('Adding product to cart', this.product);
+    if (this.product) {
+      this.emitProductAdded.emit(this.product);
+    }
   }
 
   public goBack(): void {

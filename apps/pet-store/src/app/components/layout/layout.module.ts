@@ -8,6 +8,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
 import { MatListModule } from "@angular/material/list";
 import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { CartItemsComponent } from '../cart-items/cart-items.component';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { SearchBarComponent } from '../search-bar/search-bar.component';
     MatIconModule,
     MatButtonModule,
     MatListModule,
-    SearchBarComponent
+    SearchBarComponent,
+    CartItemsComponent
   ],
   declarations: [
     LayoutComponent,
