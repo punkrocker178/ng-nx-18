@@ -27,6 +27,7 @@ export class CartItemsContextService {
       const existingItem = items.find(i => i.id === item.documentId);
       if (existingItem) {
         existingItem.quantity++;
+        items = [...items];
       } else {
         const newItem = {
           id: item.documentId,
@@ -36,6 +37,8 @@ export class CartItemsContextService {
       }
       return items;
     });
-    this._ssrCookieService.set('cartItems', JSON.stringify(this._items()), 365);
+
+    // Store items in cookie, expires in 365 days
+    this._ssrCookieService.set('cartItems', JSON.stringify(this._items()), 365, '/');
   }
 } 
