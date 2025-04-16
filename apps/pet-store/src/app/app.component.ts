@@ -3,14 +3,14 @@ import { RouterModule } from '@angular/router';
 import { LayoutModule } from './components/layout/layout.module';
 import { UserPermissionsService } from './services/api/user-permissions.service';
 import { UserPermissionContextService } from './services/context/user-permission-context.service';
-import { delay, finalize } from 'rxjs';
+import { finalize } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { isPlatformBrowser } from '@angular/common';
 @Component({
   imports: [
     RouterModule,
     LayoutModule,
-    MatProgressSpinnerModule,
+    MatProgressSpinnerModule
   ],
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   constructor(
     @Inject(PLATFORM_ID) private _platformId: string,
     private _userPermissionsService: UserPermissionsService,
-    private _userPermissionContextService: UserPermissionContextService,
+    private _userPermissionContextService: UserPermissionContextService
   ) {
 
   }
