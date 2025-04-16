@@ -1,0 +1,17 @@
+@if (!items()) {
+  <div class="cart-details">
+    <h2>Cart is empty</h2>
+    <p>Looks like you haven't added any items to your cart yet.</p>
+  </div>
+} @else {
+  <div class="cart-details">
+    @for (item of items(); track item.id) {
+      <div>
+        <div>Name: {{item.name}}</div>
+        <div>Price: {{item.price | currency}}</div>
+        <div>Quantity: {{item.quantity }}</div>
+      </div>
+
+    }
+  </div>
+}
