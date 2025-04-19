@@ -1,3 +1,5 @@
+$flex-value: start, center, end;
+
 .d-flex {
   display: flex;
 }
@@ -30,12 +32,28 @@
   flex-basis: 0;
 }
 
-.justify-content-center {
-  justify-content: center;
-}
-.justify-content-start {
-  justify-content: flex-start;
-}
-.justify-content-end {
-  justify-content: flex-end;
+@each $value in $flex-value {
+  .align-content-#{$value} {
+    align-content: #{$value};
+  }
+
+  .align-items-#{$value} {
+    align-items: #{$value};
+  }
+
+  .align-self-#{$value} {
+    align-self: #{$value};
+  }
+
+  .justify-content-#{$value} {
+    justify-content: #{$value};
+  }
+
+  .justify-items-#{$value} {
+    justify-items: #{$value};
+  }
+
+  .justify-self-#{value} {
+    justify-self: #{$value};
+  }
 }

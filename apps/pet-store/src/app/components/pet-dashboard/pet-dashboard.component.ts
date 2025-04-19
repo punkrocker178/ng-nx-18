@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProductService, Product, ProductCardComponent } from 'products';
 import { MatButtonModule } from '@angular/material/button';
-import { PERMISSION_ACTION, PERMISSION_API_PRODUCT } from '../../constants/permissions';
+import { PERMISSION_ACTION, PERMISSION_API_PRODUCT } from '../../constants/permissions.constant';
 
 @Component({
   selector: 'app-pet-dashboard',

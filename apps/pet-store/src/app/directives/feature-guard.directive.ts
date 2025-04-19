@@ -1,6 +1,6 @@
 import { Directive, effect, ElementRef, input } from '@angular/core';
 import { UserPermissionContextService } from '../services/context/user-permission-context.service';
-import { PERMISSION_ACTION_DELIMITER } from '../constants/permissions';
+import { PERMISSION_ACTION_DELIMITER } from '../constants/permissions.constant';
 
 @Directive({
   selector: '[appFeatureGuard]',
