@@ -10,6 +10,7 @@ import { COOKIE_CART_ITEMS, COOKIE_CART_ITEMS_EXPIRES } from '../../constants/co
 export class CartItemsContextService {
   private _items: WritableSignal<CartItem[]> = signal<CartItem[]>([]);
   public numItems = computed(() => this._items().reduce((acc, item) => acc + item.quantity, 0));
+  public items = computed(() => this._items());
 
   constructor(
     @Inject(PLATFORM_ID) private readonly _platformId: string,
@@ -36,6 +37,20 @@ export class CartItemsContextService {
         }
         items = [...items, newItem];
       }
+      return items;
+    });
+
+    // Store items in cookie, expires in 365 days
+    this._ssrCookieService.set(COOKIE_CART_ITEMS, JSON.stringify(this._items()), COOKIE_CART_ITEMS_EXPIRES, '/');
+  }
+
+  public removeItem(itemId: string): void {
+    this._items.update(items => {
+      const existingItemIndex = items.findIndex(i => i.id === itemId);
+      if (existingItemIndex > -1) {
+        items.splice(existingItemIndex, 1);
+      }
+      items = [...items];
       return items;
     });
 

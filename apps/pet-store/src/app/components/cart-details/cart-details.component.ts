@@ -1,37 +1,46 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, effect, signal, WritableSignal } from '@angular/core';
 import { SsrCookieService } from 'ngx-cookie-service-ssr';
-import { COOKIE_CART_ITEMS } from '../../constants/cookie.constant';
 import { CartItem, Filters, Product, ProductService, QueryRequest } from 'products';
 import QueryString from 'qs';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { CartItemsContextService } from '../../services/context/cart-items-context.service';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-cart-details',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDividerModule,
+    MatListModule
   ],
   templateUrl: './cart-details.component.html',
   styleUrl: './cart-details.component.scss'
 })
-export class CartDetailsComponent implements OnInit {
+export class CartDetailsComponent {
   public items: WritableSignal<CartItem[]> = signal([]);
   constructor(
     private readonly _ssrCookieService: SsrCookieService,
-    private readonly _productService: ProductService
+    private readonly _productService: ProductService,
+    private readonly _cartItemsContextService: CartItemsContextService,
   ) {
-
+    effect(() => {
+      const cartItemsChanges = this._cartItemsContextService.items();
+      this._handleCartItemChanges(cartItemsChanges);
+    });
   }
 
-  ngOnInit(): void {
-    this._getCartItens();
+  public removeItem(item: CartItem): void {
+    this._cartItemsContextService.removeItem(item.id);
   }
 
-  private _getCartItens(): void {
-    const cartItems = JSON.parse(this._ssrCookieService.get(COOKIE_CART_ITEMS) || '') as CartItem[];
-    if (cartItems) {
-      this._enrichCartItems(cartItems);
-    }
+  private _handleCartItemChanges(cartItems: CartItem[]): void {
+    this._enrichCartItems(cartItems);
   }
 
   private _enrichCartItems(cartItems: CartItem[]): void {

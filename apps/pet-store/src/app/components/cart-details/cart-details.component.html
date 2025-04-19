@@ -1,17 +1,24 @@
-@if (!items()) {
-  <div class="cart-details">
-    <h2>Cart is empty</h2>
-    <p>Looks like you haven't added any items to your cart yet.</p>
-  </div>
+@if (items().length === 0) {
+<div class="cart-container">
+  <h2>Cart is empty</h2>
+  <p>Looks like you haven't added any items to your cart yet.</p>
+</div>
 } @else {
-  <div class="cart-details">
+<div class="cart-container d-flex flex-col">
+  <mat-list>
     @for (item of items(); track item.id) {
-      <div>
-        <div>Name: {{item.name}}</div>
-        <div>Price: {{item.price | currency}}</div>
-        <div>Quantity: {{item.quantity }}</div>
+    <mat-list-item>
+      <div matListItemTitle>{{item.name}}</div>
+      <div matListItemLine>Price: {{item.price | currency}}</div>
+      <div matListItemLine>Quantity: {{item.quantity }}</div>
+      <div matListItemMeta>
+        <button mat-icon-button (click)="removeItem(item)">
+          <mat-icon>delete</mat-icon>
+        </button>
       </div>
-
+    </mat-list-item>
+    <mat-divider></mat-divider>
     }
-  </div>
+  </mat-list>
+</div>
 }
