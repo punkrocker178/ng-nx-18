@@ -8,6 +8,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { CartItemsContextService } from '../../services/context/cart-items-context.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
+class CartItemFormGroup {
+  public id!: FormControl<string | null>;
+  public quantity!: FormControl<number | null>;
+}
 
 @Component({
   selector: 'app-cart-details',
@@ -17,15 +23,17 @@ import { MatListModule } from '@angular/material/list';
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
-    MatListModule
+    MatListModule,
+    ReactiveFormsModule
   ],
   templateUrl: './cart-details.component.html',
   styleUrl: './cart-details.component.scss'
 })
 export class CartDetailsComponent {
   public items: WritableSignal<CartItem[]> = signal([]);
+  mainForm: FormArray<FormGroup<CartItemFormGroup>> = new FormArray<FormGroup<CartItemFormGroup>>([]);
+
   constructor(
-    private readonly _ssrCookieService: SsrCookieService,
     private readonly _productService: ProductService,
     private readonly _cartItemsContextService: CartItemsContextService,
   ) {
@@ -74,6 +82,16 @@ export class CartDetailsComponent {
       });
 
       this.items.set(cartItems);
+
+      this.mainForm.clear();
+      cartItems.forEach((item) => {
+        const formGroup = new FormGroup<CartItemFormGroup>({
+          id: new FormControl(item.id),
+          quantity: new FormControl(item.quantity)
+        });
+        this.mainForm.push(formGroup);
+      }
+      );
     });
   }
 }

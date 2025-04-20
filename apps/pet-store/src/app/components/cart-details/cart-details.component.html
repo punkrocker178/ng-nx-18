@@ -6,11 +6,14 @@
 } @else {
 <div class="cart-container d-flex flex-col">
   <mat-list>
-    @for (item of items(); track item.id) {
-    <mat-list-item>
+    @for (item of items(); track item.id; let i = $index) {
+    <mat-list-item [formGroup]="mainForm.controls[i]">
       <div matListItemTitle>{{item.name}}</div>
       <div matListItemLine>Price: {{item.price | currency}}</div>
-      <div matListItemLine>Quantity: {{item.quantity }}</div>
+      <div matListItemLine>
+        <span class="mr-2">Quantity</span>
+        <input type="number" min="1" max="10" formControlName="quantity"/>
+      </div>
       <div matListItemMeta>
         <button mat-icon-button (click)="removeItem(item)">
           <mat-icon>delete</mat-icon>
