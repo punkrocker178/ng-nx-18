@@ -1,5 +1,4 @@
-import { Component, effect, signal, WritableSignal } from '@angular/core';
-import { SsrCookieService } from 'ngx-cookie-service-ssr';
+import { Component, effect, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { CartItem, Filters, Product, ProductService, QueryRequest } from 'products';
 import QueryString from 'qs';
 import { CommonModule } from '@angular/common';
@@ -9,6 +8,7 @@ import { CartItemsContextService } from '../../services/context/cart-items-conte
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 class CartItemFormGroup {
   public id!: FormControl<string | null>;
@@ -29,9 +29,10 @@ class CartItemFormGroup {
   templateUrl: './cart-details.component.html',
   styleUrl: './cart-details.component.scss'
 })
-export class CartDetailsComponent {
+export class CartDetailsComponent implements OnInit, OnDestroy {
   public items: WritableSignal<CartItem[]> = signal([]);
   mainForm: FormArray<FormGroup<CartItemFormGroup>> = new FormArray<FormGroup<CartItemFormGroup>>([]);
+  private mainFormValueChangesSubscription: Subscription | null = null;
 
   constructor(
     private readonly _productService: ProductService,
@@ -41,6 +42,22 @@ export class CartDetailsComponent {
       const cartItemsChanges = this._cartItemsContextService.items();
       this._handleCartItemChanges(cartItemsChanges);
     });
+  }
+
+  ngOnInit(): void {
+    this.mainFormValueChangesSubscription = this.mainForm.valueChanges.subscribe((items) => {
+      items.forEach((item) => {
+        if (item.id && item.quantity) {
+          this._cartItemsContextService.updateItem(item.id, item.quantity);
+        }
+      });
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.mainFormValueChangesSubscription) {
+      this.mainFormValueChangesSubscription.unsubscribe();
+    }
   }
 
   public removeItem(item: CartItem): void {
@@ -81,17 +98,20 @@ export class CartDetailsComponent {
         return cartItem;
       });
 
-      this.items.set(cartItems);
+      this._initializeMainform(cartItems);
 
-      this.mainForm.clear();
-      cartItems.forEach((item) => {
-        const formGroup = new FormGroup<CartItemFormGroup>({
-          id: new FormControl(item.id),
-          quantity: new FormControl(item.quantity)
-        });
-        this.mainForm.push(formGroup);
-      }
-      );
+      this.items.set(cartItems);
     });
+  }
+  private _initializeMainform(cartItems: CartItem[]): void {
+    this.mainForm.clear();
+    cartItems.forEach((item) => {
+      const formGroup = new FormGroup<CartItemFormGroup>({
+        id: new FormControl(item.id),
+        quantity: new FormControl(item.quantity)
+      });
+      this.mainForm.push(formGroup, { emitEvent: false });
+    }
+    );
   }
 }

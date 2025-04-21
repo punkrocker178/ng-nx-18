@@ -12,7 +12,7 @@
       <div matListItemLine>Price: {{item.price | currency}}</div>
       <div matListItemLine>
         <span class="mr-2">Quantity</span>
-        <input type="number" min="1" max="10" formControlName="quantity"/>
+        <input type="number" min="1" max="100" formControlName="quantity" />
       </div>
       <div matListItemMeta>
         <button mat-icon-button (click)="removeItem(item)">
@@ -20,8 +20,12 @@
         </button>
       </div>
     </mat-list-item>
-    <mat-divider></mat-divider>
+
+    @if (i < items().length - 1) {
+      <mat-divider></mat-divider> 
     }
+  }
+
   </mat-list>
 </div>
 }
