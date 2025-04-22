@@ -9,6 +9,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { OrderDetailsComponent } from "../order-details/order-details.component";
 
 class CartItemFormGroup {
   public id!: FormControl<string | null>;
@@ -24,15 +25,18 @@ class CartItemFormGroup {
     MatIconModule,
     MatDividerModule,
     MatListModule,
-    ReactiveFormsModule
-  ],
+    ReactiveFormsModule,
+    OrderDetailsComponent
+],
   templateUrl: './cart-details.component.html',
   styleUrl: './cart-details.component.scss'
 })
 export class CartDetailsComponent implements OnInit, OnDestroy {
   public items: WritableSignal<CartItem[]> = signal([]);
-  mainForm: FormArray<FormGroup<CartItemFormGroup>> = new FormArray<FormGroup<CartItemFormGroup>>([]);
-  private mainFormValueChangesSubscription: Subscription | null = null;
+  public mainForm: FormArray<FormGroup<CartItemFormGroup>> = new FormArray<FormGroup<CartItemFormGroup>>([]);
+  public isCheckout = false;
+
+  private _mainFormValueChangesSubscription: Subscription | null = null;
 
   constructor(
     private readonly _productService: ProductService,
@@ -45,7 +49,7 @@ export class CartDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.mainFormValueChangesSubscription = this.mainForm.valueChanges.subscribe((items) => {
+    this._mainFormValueChangesSubscription = this.mainForm.valueChanges.subscribe((items) => {
       items.forEach((item) => {
         if (item.id && item.quantity) {
           this._cartItemsContextService.updateItem(item.id, item.quantity);
@@ -55,13 +59,17 @@ export class CartDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.mainFormValueChangesSubscription) {
-      this.mainFormValueChangesSubscription.unsubscribe();
+    if (this._mainFormValueChangesSubscription) {
+      this._mainFormValueChangesSubscription.unsubscribe();
     }
   }
 
   public removeItem(item: CartItem): void {
     this._cartItemsContextService.removeItem(item.id);
+  }
+
+  public proceedCheckout(): void {
+    this.isCheckout = true;
   }
 
   private _handleCartItemChanges(cartItems: CartItem[]): void {

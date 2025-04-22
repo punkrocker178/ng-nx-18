@@ -1,0 +1,102 @@
+<div class="container">
+  <h2>Order Details</h2>
+  <!-- Product summary section -->
+  <div class="product-summary">
+    <h3>Product Summary</h3>
+    @if ((checkoutItems() ?? []).length > 0) {
+    <mat-list>
+      @for (item of checkoutItems(); track item.id; let i = $index) {
+      <mat-list-item>
+        <div matListItemTitle>{{item.name}}</div>
+        <div matListItemLine>Price: {{item.price | currency}}</div>
+        <div matListItemLine>
+          <span class="mr-2">Quantity: {{item.quantity}}</span>
+        </div>
+        <div matListItemMeta>
+          <div class="d-flex">
+          {{item.quantity}} x {{item.price | currency}} = {{(item.quantity ? item.quantity : 0) * (item.price ? item.price : 0) | currency}}
+          </div>
+        </div>
+      </mat-list-item>
+
+      @if (i < (checkoutItems() ?? []).length - 1) {
+         <mat-divider></mat-divider>
+      }
+    }
+    </mat-list>
+    }
+    <p>Total: {{ totalPrice | currency }}</p>
+  </div>
+  @if (mainForm) {
+  <form [formGroup]="mainForm">
+    <h3>Contact Information</h3>
+    <div class="d-flex flex-row">
+      <div class=" mr-2">
+        <mat-form-field appearance="outline">
+          <label for="contactName">Contact Name</label>
+          <input matInput type="text" id="contactName" formControlName="contactName" class="form-control" />
+        </mat-form-field>
+      </div>
+      <div class=" mr-2">
+        <mat-form-field appearance="outline">
+          <label for="contactEmail">Contact Email</label>
+          <input matInput type="email" id="contactEmail" formControlName="contactEmail" class="form-control" />
+        </mat-form-field>
+      </div>
+      <div class=" mr-2">
+        <mat-form-field appearance="outline">
+          <label for="contactPhone">Contact Phone</label>
+          <input matInput type="tel" id="contactPhone" formControlName="contactPhone" class="form-control" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Address section, Street address, PostCode, City/Town, Country -->
+    <h3>Shipping Address</h3>
+    <div class="d-flex flex-row">
+      <div class=" mr-2">
+        <mat-form-field appearance="outline">
+          <label for="streetAddress">Street Address</label>
+          <input matInput type="text" id="streetAddress" formControlName="streetAddress" class="form-control" />
+        </mat-form-field>
+      </div>
+      <div class=" mr-2">
+        <mat-form-field appearance="outline">
+          <label for="city">City/Town</label>
+          <input matInput type="text" id="city" formControlName="city" class="form-control" />
+        </mat-form-field>
+      </div>
+      <div class=" mr-2">
+        <mat-form-field appearance="outline">
+          <label for="postCode">Post Code</label>
+          <input matInput type="text" id="postCode" formControlName="postCode" class="form-control" />
+        </mat-form-field>
+      </div>
+      <div class=" mr-2">
+        <mat-form-field appearance="outline">
+          <label for="country">Country</label>
+          <input matInput type="text" id="country" formControlName="country" class="form-control" />
+        </mat-form-field>
+      </div>
+    </div>
+    <!-- Payment method section -->
+     <h3>Payment Method</h3>
+    <div class=" mr-2">
+      <mat-radio-group aria-label="Select an option" formControlName="paymentMethod" class="d-flex flex-col">
+        <mat-radio-button value="COD">Cash on Delivery (COD)</mat-radio-button>
+        <mat-radio-button value="creditCard">Credit Card</mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <!-- Terms and conditions checkbox -->
+    <!-- <mat-form-field class="form-group form-check">
+      <input matInput type="checkbox" id="terms" formControlName="termsAccepted" class="form-check-input" />
+      <label for="terms" class="form-check-label">I agree to the terms and conditions</label>
+    </mat-form-field>
+    <mat-form-field  appearance="outline">
+      <label for="orderNotes">Order Notes</label>
+      <textarea matInput id="orderNotes" formControlName="orderNotes" class="form-control"></textarea>
+    </mat-form-field> -->
+    <button mat-flat-button type="submit" class="">Submit Order</button>
+  </form>
+  }
+</div>
