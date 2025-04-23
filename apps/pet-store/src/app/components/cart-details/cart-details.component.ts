@@ -27,7 +27,7 @@ class CartItemFormGroup {
     MatListModule,
     ReactiveFormsModule,
     OrderDetailsComponent
-],
+  ],
   templateUrl: './cart-details.component.html',
   styleUrl: './cart-details.component.scss'
 })
@@ -49,13 +49,7 @@ export class CartDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this._mainFormValueChangesSubscription = this.mainForm.valueChanges.subscribe((items) => {
-      items.forEach((item) => {
-        if (item.id && item.quantity) {
-          this._cartItemsContextService.updateItem(item.id, item.quantity);
-        }
-      });
-    });
+    this._mainFormValueChangesSubscription =  this._subscribeItemQuantityChanges();
   }
 
   ngOnDestroy(): void {
@@ -74,6 +68,23 @@ export class CartDetailsComponent implements OnInit, OnDestroy {
 
   private _handleCartItemChanges(cartItems: CartItem[]): void {
     this._enrichCartItems(cartItems);
+  }
+
+  private _subscribeItemQuantityChanges(): Subscription {
+    return this.mainForm.valueChanges.subscribe((items) => {
+      items.forEach((item) => {
+        if (item.id && item.quantity) {
+          this._cartItemsContextService.updateItem(item.id, item.quantity);
+          this.items.update(items => {
+            const existingItem = items.find(i => i.id === item.id);
+            if (existingItem) {
+              existingItem.quantity = item.quantity ?? 1;
+            }
+            return items;
+          });
+        }
+      });
+    });
   }
 
   private _enrichCartItems(cartItems: CartItem[]): void {

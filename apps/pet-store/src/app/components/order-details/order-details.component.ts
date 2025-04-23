@@ -19,7 +19,6 @@ class OrderDetailsFormViewModel {
   public paymentMethod!: FormControl<string | null>;
   public termsAccepted!: FormControl<boolean | null>;
   public orderNotes!: FormControl<string | null>;
-
 }
 
 @Component({
@@ -38,14 +37,16 @@ class OrderDetailsFormViewModel {
   styleUrl: './order-details.component.scss'
 })
 export class OrderDetailsComponent implements OnInit {
-  public checkoutItems: InputSignal<CartItem[] | undefined>  = input<CartItem[]>();
+  public checkoutItems: InputSignal<CartItem[]> = input.required<CartItem[]>();
   public totalPrice = 0;
   mainForm: FormGroup<OrderDetailsFormViewModel> | undefined;
 
   constructor() {
     effect(() => {
-      console.log(this.checkoutItems())
-    }); 
+      if (this.checkoutItems()) {
+        this._handleCartItemChanges(this.checkoutItems());
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -65,5 +66,16 @@ export class OrderDetailsComponent implements OnInit {
       termsAccepted: new FormControl<boolean | null>(null),
       orderNotes: new FormControl<string | null>(null)
     });
+  }
+
+  private _handleCartItemChanges(cartItems: CartItem[]): void {
+    this.totalPrice = cartItems.reduce(
+      (acc, item) => {
+        const itemPrice = item.price ?? 0;
+        const itemQuantity = item.quantity ?? 1;
+        return acc + (itemPrice * itemQuantity);
+      },
+      0
+    );
   }
 }
