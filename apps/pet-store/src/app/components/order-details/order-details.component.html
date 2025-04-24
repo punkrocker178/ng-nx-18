@@ -28,7 +28,7 @@
     <p>Total: {{ totalPrice | currency }}</p>
   </div>
   @if (mainForm) {
-  <form [formGroup]="mainForm">
+  <form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
     <h3>Contact Information</h3>
     <div class="d-flex flex-row">
       <div class=" mr-2">
@@ -96,7 +96,7 @@
       <label for="orderNotes">Order Notes</label>
       <textarea matInput id="orderNotes" formControlName="orderNotes" class="form-control"></textarea>
     </mat-form-field> -->
-    <button mat-flat-button type="submit" class="">Submit Order</button>
+    <button mat-flat-button type="submit">Submit Order</button>
   </form>
   }
 </div>

@@ -54,6 +54,16 @@ const proxyPostStrapiApi = proxy('http://strapi:1337', {
   proxyReqPathResolver: req => {
     return `${url.parse(req.url).path}`;
   },
+  proxyReqOptDecorator: (proxyReqOpts, userReq) => {
+    // recieves an Object of headers, returns an Object of headers.
+    if (userReq.cookies['token'] && !authApis.includes(userReq.url)) {
+      if (proxyReqOpts.headers) {
+        proxyReqOpts.headers['Authorization'] = `Bearer ${userReq.cookies['token']}`;
+        console.log('Added token to headers');
+      }
+    }
+    return proxyReqOpts;
+  },
   userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
     if (authApis.includes(userReq.url)) {
       const data = JSON.parse(proxyResData.toString('utf8'));
@@ -62,8 +72,8 @@ const proxyPostStrapiApi = proxy('http://strapi:1337', {
       userRes.cookie('token', data.jwt, { httpOnly: true, expires: new Date(expiry) });
       userRes.cookie(`token-date`, expiry, { expires: new Date(expiry) });
       console.log('Added token to cookies');
-      return proxyResData;
     }
+    return proxyResData;
   }
 }
 );

@@ -14,6 +14,6 @@ export class OrderService {
   ) {}
 
   public createOrder(payload: OrderPayload): Observable<any> {
-    return this._httpClient.post(this.API_URL, payload);
+    return this._httpClient.post(this.API_URL, { data: payload });
   }
 }
