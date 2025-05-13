@@ -25,7 +25,6 @@ type OrderDetailsFormViewModel = {
   orderNotes: FormControl<string | null>;
 };
 
-
 @Component({
   selector: 'app-order-details',
   standalone: true,
@@ -65,7 +64,7 @@ export class OrderDetailsComponent implements OnInit {
     const payload = this._prepareOrderPayload();
     if (!payload) return;
     this._orderService.createOrder(payload).subscribe((res) => {
-      this._router.navigateByUrl(`orders/${res.data.documentId}`);
+      // this._router.navigateByUrl(`orders/${res.data.documentId}`);
     });
   }
 

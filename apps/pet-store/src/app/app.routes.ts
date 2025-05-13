@@ -4,6 +4,7 @@ import { PetDashboardComponent } from './components/pet-dashboard/pet-dashboard.
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { CartDetailsComponent } from './components/cart-details/cart-details.component';
+import { OrderDetailsComponent } from './components/order-details/order-details.component';
 
 export const appRoutes: Route[] = [
   {
@@ -26,6 +27,13 @@ export const appRoutes: Route[] = [
   {
     path: 'cart',
     component: CartDetailsComponent
+  },
+  {
+    path: 'checkout',
+    component: OrderDetailsComponent
+  },
+  {
+    path: 'orders/:orderId'
   },
   {
     path: 'login',
