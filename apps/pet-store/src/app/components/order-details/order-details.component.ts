@@ -9,6 +9,7 @@ import { CartItem, Order, OrderPayload, OrderService } from 'products';
 import { MatListModule } from '@angular/material/list';
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
+import { CartItemsContextService } from '../../services/context/cart-items-context.service';
 
 type OrderDetailsFormViewModel = {
   contactName: FormControl<string>;
@@ -47,6 +48,7 @@ export class OrderDetailsComponent implements OnInit {
 
   constructor(
     private readonly _router: Router,
+    private readonly _cartItemsContextService: CartItemsContextService,
     private readonly _orderService: OrderService,
   ) {
     effect(() => {
@@ -64,6 +66,7 @@ export class OrderDetailsComponent implements OnInit {
     const payload = this._prepareOrderPayload();
     if (!payload) return;
     this._orderService.createOrder(payload).subscribe((res) => {
+      this._cartItemsContextService.removeAllItems();
       this._router.navigateByUrl(`orders/${res.data.documentId}`);
     });
   }
