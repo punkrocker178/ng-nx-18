@@ -14,15 +14,15 @@
         </div>
         <div matListItemMeta>
           <div class="d-flex">
-            {{item.quantity}} x {{item.price | currency}} = {{(item.quantity ? item.quantity : 0) * (item.price ?
-            item.price : 0) | currency}}
+            {{item.quantity}} x {{item.price | currency}} = {{(item.quantity ? item.quantity : 0) * (item.price ? item.price : 0) | currency}}
           </div>
         </div>
       </mat-list-item>
 
-      @if (i < (checkoutItems() ?? []).length - 1) { <mat-divider></mat-divider>
-        }
-        }
+      @if (i < (checkoutItems() ?? []).length - 1) { 
+        <mat-divider></mat-divider>
+      }
+    }
     </mat-list>
     }
     <p><span class="text-bold">Total:</span>{{ totalPrice | currency }}</p>
