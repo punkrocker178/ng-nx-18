@@ -14,21 +14,20 @@
         </div>
         <div matListItemMeta>
           <div class="d-flex">
-            {{item.quantity}} x {{item.price | currency}} = {{(item.quantity ? item.quantity : 0) * (item.price ?
-            item.price : 0) | currency}}
+          {{item.quantity}} x {{item.price | currency}} = {{(item.quantity ? item.quantity : 0) * (item.price ? item.price : 0) | currency}}
           </div>
         </div>
       </mat-list-item>
 
-      @if (i < (checkoutItems() ?? []).length - 1) { <mat-divider></mat-divider>
-        }
-        }
+      @if (i < (checkoutItems() ?? []).length - 1) {
+         <mat-divider></mat-divider>
+      }
+    }
     </mat-list>
     }
-    <p><span class="text-bold">Total:</span>{{ totalPrice | currency }}</p>
+    <p>Total: {{ totalPrice | currency }}</p>
   </div>
-
-  @if (mainForm && !orderDetails()) {
+  @if (mainForm) {
   <form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
     <h3>Contact Information</h3>
     <div class="d-flex flex-row">
@@ -81,7 +80,7 @@
       </div>
     </div>
     <!-- Payment method section -->
-    <h3>Payment Method</h3>
+     <h3>Payment Method</h3>
     <div class=" mr-2">
       <mat-radio-group aria-label="Select an option" formControlName="paymentMethod" class="d-flex flex-col">
         <mat-radio-button value="COD">Cash on Delivery (COD)</mat-radio-button>
@@ -100,26 +99,4 @@
     <button mat-flat-button type="submit">Submit Order</button>
   </form>
   }
-
-  @if (!!orderDetails()) {
-  <!-- Order summary from orderDetails -->
-  <p><span class="text-bold">Order:</span> {{orderDetails()?.orderId}}</p>
-  <p><span class="text-bold">Payment Method:</span> {{orderDetails()?.paymentMethod}}</p>
-  <div class="d-flex flex-row">
-    <div class="order-summary w-100">
-      <h3>Contact</h3>
-      <div>
-        <p><span class="text-bold">Name:</span> {{orderDetails()?.contactInfo?.contactName}}</p>
-        <p><span class="text-bold">Email:</span> {{orderDetails()?.contactInfo?.contactEmail}}</p>
-        <p><span class="text-bold">Phone:</span> {{orderDetails()?.contactInfo?.contactPhone}}</p>
-      </div>
-    </div>
-    <div class="shipping-address w-100">
-      <h3>Shipping Address</h3>
-      <p><span class="text-bold">Street Address:</span></p>
-      <p><span class="text-bold">City/Town:</span></p>
-      <p><span class="text-bold">Post Code:</span></p>
-      <p><span class="text-bold">Country:</span></p>
-    </div>
-  </div>
-  }
+</div>

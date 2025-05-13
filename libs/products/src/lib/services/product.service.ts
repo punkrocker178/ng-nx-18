@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable, isDevMode } from "@angular/core";
 import { map, Observable } from "rxjs";
 import { Product } from "../models/api/product.model";
-import { DataQueryResponse as DataQueryResponse } from "../models/core/data-query-response.model";
+import { DataQeuryResponse as DataQueryResponse } from "../models/core/data-query-response.model";
 import { QueryRequest } from "../models/api/query-request.model";
 
 @Injectable({ providedIn: 'root' })

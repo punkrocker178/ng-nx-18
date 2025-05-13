@@ -1,10 +1,5 @@
-export class DataQueryResponse<T> {
+export class DataQeuryResponse<T> {
   public data!: T[];
-  public meta!: Meta
-}
-
-export class SingleQueryResponse<T> {
-  public data!: T;
   public meta!: Meta
 }
 

@@ -5,7 +5,6 @@ import { ProductDetailsComponent } from './components/product-details/product-de
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { CartDetailsComponent } from './components/cart-details/cart-details.component';
 import { OrderDetailsComponent } from './components/order-details/order-details.component';
-import { OrderSummaryComponent } from './components/order-summary/order-summary.component';
 
 export const appRoutes: Route[] = [
   {
@@ -34,8 +33,7 @@ export const appRoutes: Route[] = [
     component: OrderDetailsComponent
   },
   {
-    path: 'orders/:orderId',
-    component: OrderSummaryComponent
+    path: 'orders/:orderId'
   },
   {
     path: 'login',
