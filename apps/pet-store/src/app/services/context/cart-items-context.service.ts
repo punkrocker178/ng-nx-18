@@ -68,4 +68,9 @@ export class CartItemsContextService {
     // Store items in cookie, expires in 365 days
     this._ssrCookieService.set(COOKIE_CART_ITEMS, JSON.stringify(this._items()), COOKIE_CART_ITEMS_EXPIRES, '/');
   }
+
+  public removeAllItems(): void {
+    this._items.set([]);
+    this._ssrCookieService.delete(COOKIE_CART_ITEMS, '/');
+  }
 }

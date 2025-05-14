@@ -5,12 +5,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
-import { CartItem } from 'products';
+import { CartItem, Order, OrderPayload, OrderService } from 'products';
 import { MatListModule } from '@angular/material/list';
-import { OrderService } from '../../services/api/order.service';
-import { OrderPayload } from '../../models/api/order.model';
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
+import { CartItemsContextService } from '../../services/context/cart-items-context.service';
 
 type OrderDetailsFormViewModel = {
   contactName: FormControl<string>;
@@ -42,11 +41,14 @@ type OrderDetailsFormViewModel = {
 })
 export class OrderDetailsComponent implements OnInit {
   public checkoutItems: InputSignal<CartItem[]> = input.required<CartItem[]>();
+  public orderDetails: InputSignal<Order | null> = input<Order | null>(null);
+
   public totalPrice = 0;
   mainForm: FormGroup<OrderDetailsFormViewModel> | undefined;
 
   constructor(
     private readonly _router: Router,
+    private readonly _cartItemsContextService: CartItemsContextService,
     private readonly _orderService: OrderService,
   ) {
     effect(() => {
@@ -64,7 +66,8 @@ export class OrderDetailsComponent implements OnInit {
     const payload = this._prepareOrderPayload();
     if (!payload) return;
     this._orderService.createOrder(payload).subscribe((res) => {
-      // this._router.navigateByUrl(`orders/${res.data.documentId}`);
+      this._cartItemsContextService.removeAllItems();
+      this._router.navigateByUrl(`orders/${res.data.documentId}`);
     });
   }
 
@@ -112,6 +115,14 @@ export class OrderDetailsComponent implements OnInit {
       orderId: uuidv4(),
       totalPrice: this.totalPrice,
     } as OrderPayload;
+
+    payload.orderDetails = JSON.stringify(this.checkoutItems().map(item => ({
+      id: item.id,
+      name: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      thumbnail: item.thumbnail
+    })));
 
     payload.products = {
       connect: this.checkoutItems().map(item => item.id)
