@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
-import { CartItem, Order, OrderPayload, OrderService } from 'products';
+import { CartItem, NotificationService, Order, OrderPayload, OrderService } from 'products';
 import { MatListModule } from '@angular/material/list';
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from '@angular/router';
@@ -50,6 +50,7 @@ export class OrderDetailsComponent implements OnInit {
     private readonly _router: Router,
     private readonly _cartItemsContextService: CartItemsContextService,
     private readonly _orderService: OrderService,
+    private readonly _notificationService: NotificationService
   ) {
     effect(() => {
       if (this.checkoutItems()) {
@@ -68,6 +69,7 @@ export class OrderDetailsComponent implements OnInit {
     this._orderService.createOrder(payload).subscribe((res) => {
       this._cartItemsContextService.removeAllItems();
       this._router.navigateByUrl(`orders/${res.data.documentId}`);
+      this._notificationService.pushSuccess('Order placed successfully');
     });
   }
 
